@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'components/my_data_display.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -33,10 +35,15 @@ class MyApp extends StatelessWidget {
             title: Text(data.data), // Note: this doesn't get updated
           ),
           floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
             onPressed: () => data.incrementAndNotifyListeners(),
           ),
-          body: Level1(),
+          body: Column(
+            children: [
+              MyDataDisplay(),
+              Expanded(child: Level1()),
+            ],
+          ),
         ),
       ),
     );
@@ -56,7 +63,7 @@ class Level2 extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Expanded(child: Level3Bis()),
+        Expanded(child: Level3()),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
           margin: const EdgeInsets.only(bottom: 35.0, right: 75.0),
@@ -72,7 +79,7 @@ class Level2 extends StatelessWidget {
   }
 }
 
-class Level3Bis extends StatelessWidget {
+class Level3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -93,7 +100,7 @@ class TestProviderListening1 extends StatelessWidget {
   Widget build(BuildContext context) {
     final valueProviderOf = Provider.of<MyDummyData>(context);
     return DisplayColumn(
-        label: 'Provider.of<T>(context)', value: valueProviderOf.data);
+        label: 'Provider.of<Data>(context)', value: valueProviderOf.data);
   }
 }
 
@@ -103,7 +110,7 @@ class TestProviderListening2 extends StatelessWidget {
     // Equivalent to 'Provider.of', but is accessible only inside [StatelessWidget.build] and [State.build].
     final valueContextWatch = context.watch<MyDummyData>();
     return DisplayColumn(
-        label: 'context.watch<T>()', value: valueContextWatch.data);
+        label: 'context.watch<Data>()', value: valueContextWatch.data);
   }
 }
 
@@ -113,7 +120,7 @@ class TestProviderNotListening1 extends StatelessWidget {
     final valueProviderOfWithoutListening =
         Provider.of<MyDummyData>(context, listen: false);
     return DisplayColumn(
-        label: 'Provider.of<T>(context, listen: false)',
+        label: 'Provider.of<Data>(context, listen: false)',
         value: valueProviderOfWithoutListening.data);
   }
 }
@@ -123,7 +130,7 @@ class TestProviderNotListening2 extends StatelessWidget {
   Widget build(BuildContext context) {
     final valueContextRead = context.read<MyDummyData>();
     return DisplayColumn(
-        label: 'context.read<T>()', value: valueContextRead.data);
+        label: 'context.read<Data>()', value: valueContextRead.data);
   }
 }
 
@@ -132,12 +139,12 @@ class TestProviderListeningWithSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     int counter = context.select<MyDummyData, int>((data) => data.counter);
     return DisplayColumn(
-        label: 'context.select<T, int>((d) => d.counter)',
+        label: 'context.select<Data, int>((d) => d.counter)',
         value: counter.toString());
   }
 }
 
-class Level3 extends StatelessWidget {
+class Level3ShowingTrapToAvoid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // WATCH OUT:
@@ -210,14 +217,15 @@ class DisplayColumn extends StatelessWidget {
       children: [
         Text(
           '$label:',
-          style: const TextStyle(fontSize: 18.0),
+          style: const TextStyle(fontSize: 17.0, color: Colors.blue),
         ),
         const SizedBox(
           height: 15.0,
         ),
         Text(
           value,
-          style: const TextStyle(fontSize: 23.0),
+          style:
+              const TextStyle(fontSize: 23.0, overflow: TextOverflow.ellipsis),
         ),
         const SizedBox(
           height: 55.0,
