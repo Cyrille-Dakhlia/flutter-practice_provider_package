@@ -7,9 +7,15 @@ void main() {
 
 class MyDummyData with ChangeNotifier {
   String data = 'Some initial data...';
+  int counter = 0;
 
   void changeDataAndNotifyListeners(String newData) {
     data = newData;
+    notifyListeners();
+  }
+
+  void incrementAndNotifyListeners() {
+    counter++;
     notifyListeners();
   }
 }
@@ -25,6 +31,10 @@ class MyApp extends StatelessWidget {
         home: Scaffold(
           appBar: AppBar(
             title: Text(data.data), // Note: this doesn't get updated
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () => data.incrementAndNotifyListeners(),
           ),
           body: Level1(),
         ),
@@ -49,7 +59,7 @@ class Level2 extends StatelessWidget {
         Expanded(child: Level3Bis()),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          margin: const EdgeInsets.only(bottom: 35.0),
+          margin: const EdgeInsets.only(bottom: 35.0, right: 75.0),
           child: TextField(
             onChanged: (value) =>
                 Provider.of<MyDummyData>(context, listen: false)
@@ -72,6 +82,7 @@ class Level3Bis extends StatelessWidget {
         TestProviderNotListening1(),
         TestProviderListening2(),
         TestProviderNotListening2(),
+        TestProviderListeningWithSelect(),
       ],
     );
   }
@@ -113,6 +124,16 @@ class TestProviderNotListening2 extends StatelessWidget {
     final valueContextRead = context.read<MyDummyData>();
     return DisplayColumn(
         label: 'context.read<T>()', value: valueContextRead.data);
+  }
+}
+
+class TestProviderListeningWithSelect extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    int counter = context.select<MyDummyData, int>((data) => data.counter);
+    return DisplayColumn(
+        label: 'context.select<T, int>((d) => d.counter)',
+        value: counter.toString());
   }
 }
 
