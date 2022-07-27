@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
       // We use ".value" to provide the existing MyDummyData (to be able to use it in the AppBar title), instead of creating a new instance
       value: data,
       // return ChangeNotifierProvider<MyDummyData>(
-      //   create: (BuildContext context) => MyDummyData(),
+      //   create: (BuildContext context) => MyDummyData(), // create is called lazely by default (can be changed via the "lazy" parameter)
       child: MaterialApp(
         home: Scaffold(
           appBar: AppBar(
