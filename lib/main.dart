@@ -85,22 +85,25 @@ class Level2 extends StatelessWidget {
 class Level3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(15.0),
-      children: [
-        TestProviderListening1(),
-        TestProviderNotListening1(),
-        TestProviderListening2(),
-        TestProviderNotListening2(),
-        TestProviderWithConsumer(),
-        TestProviderListeningWithSelect(),
-        TestProviderListeningWithSelector(),
-      ],
+    return Scrollbar(
+      thumbVisibility: true,
+      child: ListView(
+        padding: const EdgeInsets.all(15.0),
+        children: [
+          TestProviderListeningUsingProviderOf(),
+          TestProviderNotListeningUsingProviderOf(),
+          TestProviderListeningUsingContextWatch(),
+          TestProviderNotListeningUsingContextRead(),
+          TestProviderListeningUsingConsumer(),
+          TestProviderPartlyListeningUsingContextSelect(),
+          TestProviderPartlyListeningUsingSelector(),
+        ],
+      ),
     );
   }
 }
 
-class TestProviderListening1 extends StatelessWidget {
+class TestProviderListeningUsingProviderOf extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final valueProviderOf = Provider.of<MyDummyData>(context);
@@ -109,7 +112,7 @@ class TestProviderListening1 extends StatelessWidget {
   }
 }
 
-class TestProviderListening2 extends StatelessWidget {
+class TestProviderListeningUsingContextWatch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Equivalent to 'Provider.of', but is accessible only inside [StatelessWidget.build] and [State.build].
@@ -119,7 +122,7 @@ class TestProviderListening2 extends StatelessWidget {
   }
 }
 
-class TestProviderNotListening1 extends StatelessWidget {
+class TestProviderNotListeningUsingProviderOf extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final valueProviderOfWithoutListening =
@@ -130,7 +133,7 @@ class TestProviderNotListening1 extends StatelessWidget {
   }
 }
 
-class TestProviderNotListening2 extends StatelessWidget {
+class TestProviderNotListeningUsingContextRead extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final valueContextRead = context.read<MyDummyData>();
@@ -139,7 +142,7 @@ class TestProviderNotListening2 extends StatelessWidget {
   }
 }
 
-class TestProviderWithConsumer extends StatelessWidget {
+class TestProviderListeningUsingConsumer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<MyDummyData>(
@@ -149,7 +152,7 @@ class TestProviderWithConsumer extends StatelessWidget {
   }
 }
 
-class TestProviderListeningWithSelect extends StatelessWidget {
+class TestProviderPartlyListeningUsingContextSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int counter = context.select<MyDummyData, int>((data) => data.counter);
@@ -159,7 +162,7 @@ class TestProviderListeningWithSelect extends StatelessWidget {
   }
 }
 
-class TestProviderListeningWithSelector extends StatelessWidget {
+class TestProviderPartlyListeningUsingSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<MyDummyData, int>(
