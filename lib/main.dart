@@ -27,8 +27,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<MyDummyData>(
-      create: (BuildContext context) => data,
+    return ChangeNotifierProvider<MyDummyData>.value(
+      // We use ".value" to provide the existing MyDummyData (to be able to use it in the AppBar title), instead of creating a new instance
+      value: data,
+      // return ChangeNotifierProvider<MyDummyData>(
+      //   create: (BuildContext context) => MyDummyData(),
       child: MaterialApp(
         home: Scaffold(
           appBar: AppBar(
@@ -89,7 +92,9 @@ class Level3 extends StatelessWidget {
         TestProviderNotListening1(),
         TestProviderListening2(),
         TestProviderNotListening2(),
+        TestProviderWithConsumer(),
         TestProviderListeningWithSelect(),
+        TestProviderListeningWithSelector(),
       ],
     );
   }
@@ -134,6 +139,16 @@ class TestProviderNotListening2 extends StatelessWidget {
   }
 }
 
+class TestProviderWithConsumer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<MyDummyData>(
+      builder: (context, myDummyDataModel, child) => DisplayColumn(
+          label: 'Consumer<Data>(builder: ...)', value: myDummyDataModel.data),
+    );
+  }
+}
+
 class TestProviderListeningWithSelect extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -141,6 +156,18 @@ class TestProviderListeningWithSelect extends StatelessWidget {
     return DisplayColumn(
         label: 'context.select<Data, int>((d) => d.counter)',
         value: counter.toString());
+  }
+}
+
+class TestProviderListeningWithSelector extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Selector<MyDummyData, int>(
+      selector: (context, myDummyDataModel) => myDummyDataModel.counter,
+      builder: (context, counter, child) => DisplayColumn(
+          label: 'Selector<Data, int>(selector: ..., builder: ...)',
+          value: counter.toString()),
+    );
   }
 }
 

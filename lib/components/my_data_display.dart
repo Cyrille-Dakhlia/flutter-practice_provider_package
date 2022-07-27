@@ -15,31 +15,29 @@ class MyDataDisplay extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(),
         ),
-        child: Flexible(
-          child: Row(
-            children: [
-              const Text(
-                'Data:',
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+        child: Row(
+          children: [
+            const Text(
+              'Data:',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'String data = ${data.data}',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  Text('int counter = ${data.counter}'),
+                ],
               ),
-              const SizedBox(
-                width: 10.0,
-              ),
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'String data = ${data.data}',
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    Text('int counter = ${data.counter}'),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
